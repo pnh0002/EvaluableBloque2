@@ -2,7 +2,13 @@
 
 package modelo;
 
+import controller.DocumentoController;
 import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class DocumentoModelo {
@@ -13,16 +19,24 @@ public class DocumentoModelo {
     private Font font; 
     private String tipo; 
     private int size;
-    private String message; 
     
+    private String contenido; 
     
-    public DocumentoModelo(Font fuente, String tipo_fuente, int tamano_fuente){
+    private DocumentoController documentController; 
+    
+    public DocumentoModelo(DocumentoController documentController){
+        this.documentController = documentController; 
+    }
+    
+    public DocumentoModelo(Font fuente, String tipo_fuente, int tamano_fuente, DocumentoController dc){
+        this(dc); 
         this.negrita = false; 
-        this.message = ""; 
         
         this.font = fuente; 
         this.tipo = tipo_fuente; 
         this.size = tamano_fuente; 
+        
+        this.contenido = ""; 
         
     }
 
@@ -57,18 +71,62 @@ public class DocumentoModelo {
     public void setSize(int size) {
         this.size = size;
     }
-
-    public String getMessage() {
-        return message;
+    
+    public int getDefaultSize(){return this.DEFAULT_SIZE;}
+    public boolean getNegrita(){return this.negrita; }
+    
+    
+    
+    
+    // Funciones útiles 
+    
+    public void setContent(String m){
+        this.contenido = m; 
     }
-
-    public void setMessage(String message) {
-        this.message = message;
+    
+    
+    // Save Data
+    
+    public void saveData(String url){
+        try{
+            
+            BufferedWriter bw = new BufferedWriter(new FileWriter(url)); 
+            bw.write(this.contenido);
+            bw.close(); 
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
+    
+    // Load Data 
+    
+    public String  loadData(String url){
+        
+        String message = ""; 
+        
+        try{
+            
+             BufferedReader bf = new BufferedReader(new FileReader(url));
+                String linea; 
+                
+                while((linea = bf.readLine()) != null){
+                    
+                    message = message + linea + "\n"; 
+                    
+                }
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        
+        return message; 
+    }
+    
 
     @Override
     public String toString() {
-        return "DocumentoModelo{" + "DEFAULT_SIZE=" + DEFAULT_SIZE + ", negrita=" + negrita + ", font=" + font + ", tipo=" + tipo + ", size=" + size + ", message=" + message + '}';
+        return "DocumentoModelo{" + "DEFAULT_SIZE=" + DEFAULT_SIZE + ", negrita=" + negrita + ", font=" + font + ", tipo=" + tipo + ", size=" + size + '}';
     }
     
     

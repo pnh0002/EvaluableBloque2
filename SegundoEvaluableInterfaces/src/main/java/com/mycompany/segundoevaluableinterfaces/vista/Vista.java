@@ -4,31 +4,13 @@
  */
 package com.mycompany.segundoevaluableinterfaces.vista;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import java.awt.Color;
+import controller.DocumentoController;
 import java.awt.Font;
-import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JColorChooser;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledEditorKit;
 
 /**
@@ -45,37 +27,29 @@ public class Vista extends javax.swing.JFrame {
     
     private boolean negrita = false; 
     private ImageIcon icon; 
+    
     private StyledEditorKit editor; 
     private MutableAttributeSet attri; 
+    
     private Font font; 
-    private String tipo; 
-    private final int DEFAULT_SIZE = 12; 
-    private int size; 
-    private String message; 
+    
+    
+    DocumentoController documentController = new DocumentoController(this); 
     
     public Vista() {
         initComponents();
         
-        Size.setValue(DEFAULT_SIZE);
-        
-        // Declaramos 
-        editor  = new StyledEditorKit();
-        attri  = editor.getInputAttributes(); 
-        font = new Font("Garamond", Font.PLAIN, DEFAULT_SIZE); 
-        size = DEFAULT_SIZE; 
-        message = ""; 
-        
         // Centrar la pantalla 
         this.setLocationRelativeTo(null);
         
+        Size.setValue(12);
+        
+        font = new Font("Garamond", Font.PLAIN, 12);  
+        
+        
+        
         // Cargar un estilo de pantalla "Moderno" 
-        try{
-            Theme.setIcon(new ImageIcon(getClass().getResource("/Theme/Luna.png")));
-            UIManager.setLookAndFeel(new FlatLightLaf());
-            FlatLaf.updateUI();
-        }catch(Exception e){
-            System.err.println("No funciona el cambio de tema!"); 
-        }
+        documentController.changeTheme(); // Tick
     }
 
     /**
@@ -250,37 +224,16 @@ public class Vista extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Cambiar el tema de la interfaz 
+    
     private void ThemeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ThemeMouseClicked
-        if(Theme.isSelected()){
-            try{
-                Theme.setIcon(new ImageIcon(getClass().getResource("/Theme/Sol.png")));
-                UIManager.setLookAndFeel(new FlatDarkLaf());
-                FlatLaf.updateUI();
-            }catch(Exception e){
-                
-            }
-        }else{
-            try{
-                Theme.setIcon(new ImageIcon(getClass().getResource("/Theme/Luna.png")));
-                UIManager.setLookAndFeel(new FlatLightLaf());
-                FlatLaf.updateUI();
-            }catch(Exception e){
-                    
-            }
-        }
+        documentController.changeTheme();
     }//GEN-LAST:event_ThemeMouseClicked
 
     // Cambio de color a "Negrita" 
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
 
-        if(negrita){
-            this.negrita = false; 
-        }else if(!negrita){
-            this.negrita = true; 
-            StyleConstants.setFontSize(attri, (int) Size.getValue()); 
-            StyleConstants.setBold(attri, true);
-            Text.setCharacterAttributes(attri, false);
-        }
+        this.documentController.pickBold();
         
     }//GEN-LAST:event_jMenu3MouseClicked
 
@@ -288,15 +241,7 @@ public class Vista extends javax.swing.JFrame {
     
     private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
         
-        JColorChooser color = new JColorChooser(); 
-        int resultado = JOptionPane.showConfirmDialog(null, color, "Selecciona un color", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        
-        if(resultado == JOptionPane.OK_OPTION){
-            Color c = color.getColor(); 
-            StyleConstants.setFontSize(attri, (int) Size.getValue()); 
-            StyleConstants.setForeground(attri, c);
-            Text.setCharacterAttributes(attri, false);
-        }
+        this.documentController.chooseColor();
         
     }//GEN-LAST:event_jMenu4MouseClicked
 
@@ -307,8 +252,7 @@ public class Vista extends javax.swing.JFrame {
         String message = "Ctrl + N -> Nuevo Archivo "
                 + "\nCtrl + O -> Abrir Documento"
                 + "\nCtrl + G -> Guardar"; 
-        icon = new ImageIcon(getClass().getResource("/Icons/Duda.png")); 
-        JOptionPane.showConfirmDialog(null, message, "Controles", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,icon ); 
+        this.documentController.showInformation(message, "controles");
                 
     }//GEN-LAST:event_jMenu5MouseClicked
     
@@ -318,8 +262,7 @@ public class Vista extends javax.swing.JFrame {
         
         String message = "Autor/a -> " + System.getProperty("user.name") 
                 + "\nFecha -> " + LocalDate.now(); 
-        icon = new ImageIcon(getClass().getResource("/Icons/Toy.png")); 
-        JOptionPane.showConfirmDialog(null, message, "Controles", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,icon ); 
+        this.documentController.showInformation(message, "autor");
         
     }//GEN-LAST:event_jMenu6MouseClicked
     
@@ -350,14 +293,13 @@ public class Vista extends javax.swing.JFrame {
     // Cambiamos el tamaño de la letra 
     
     private void jToggleButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton1MouseClicked
-        StyleConstants.setFontSize(attri, (int) Size.getValue()); ;
-        Text.setCharacterAttributes(attri, false);
+        this.documentController.sizeLetter(); 
     }//GEN-LAST:event_jToggleButton1MouseClicked
 
     // Cargar Archivo Existente 
     
     private void jMenu7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu7MouseClicked
-        this.pruebaArchivo();
+        this.documentController.loadDocument();
     }//GEN-LAST:event_jMenu7MouseClicked
 
     // Nuevo Archivo 
@@ -369,63 +311,41 @@ public class Vista extends javax.swing.JFrame {
     // Guardar 
     
     private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-        
-        JFileChooser file = new JFileChooser(); 
-        file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int resultado = file.showOpenDialog(this); 
-        
-        if(resultado == JFileChooser.APPROVE_OPTION){
-            java.io.File archivo = file.getSelectedFile(); 
-            
-            File documento = new File(archivo.getAbsolutePath()); 
-            try { 
-                documento.createNewFile();
-                message = Text.getText();
-                BufferedWriter bw = new BufferedWriter(new FileWriter(documento.getAbsolutePath()));  
-                System.out.println(message);
-                bw.write(message);
-                bw.close(); 
-            } catch (IOException ex) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-        }
-        
+        this.documentController.saveDocumment();
         
     }//GEN-LAST:event_jMenu1MouseClicked
 
     
     
-    public void pruebaArchivo(){
-        JFileChooser file = new JFileChooser(); 
-        int resultado = file.showOpenDialog(this); 
-        
-        if(resultado == JFileChooser.APPROVE_OPTION){
-            java.io.File archivo = file.getSelectedFile(); 
-            message = ""; 
-            try { 
-                BufferedReader bf = new BufferedReader(new FileReader(archivo.getAbsolutePath()));
-                String linea; 
-                
-                while((linea = bf.readLine()) != null){
-                    
-                    message = message + linea + "\n"; 
-                    
-                }
-                
-                Text.setText(message);
-                
-                
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    
+    // Funciones de return 
+    public JToggleButton getToggleButton(){
+        return this.Theme; 
+    }
+    
+    public JTextPane getTextElement(){
+        return this.Text; 
+    }
+    
+    // Retornar el contenido 
+    
+    public String getText(){
+        return this.Text.getText(); 
+    }
+    
+    public StyledEditorKit getStyle(){
+        return this.editor; 
+    }
+    
+    public MutableAttributeSet getAttri(){
+        return this.attri; 
     }
     
     
+    // Funciones Setter 
+    public void setText(String m){
+        this.Text.setText(m); 
+    }
    
     
     /**
