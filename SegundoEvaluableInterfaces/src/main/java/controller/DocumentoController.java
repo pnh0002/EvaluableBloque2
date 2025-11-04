@@ -60,7 +60,9 @@ public class DocumentoController {
     // Guardar el documento 
     
     public void saveDocumment(){
-        document = new DocumentoModelo(this); 
+        if(this.document == null){
+            document = new DocumentoModelo(this); 
+        }
         JFileChooser file = new JFileChooser(); 
         file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = file.showOpenDialog(this.vista); 
@@ -78,7 +80,9 @@ public class DocumentoController {
     // Cargar el documento
     
     public void loadDocument(){
-        document = new DocumentoModelo(this); 
+        if(this.document == null){
+            document = new DocumentoModelo(this); 
+        }
         JFileChooser file = new JFileChooser(); 
         int resultado = file.showOpenDialog(this.vista); 
         
@@ -96,13 +100,15 @@ public class DocumentoController {
     // Conseguir el color 
     
     public void chooseColor(){
-        document = new DocumentoModelo(this); 
+        if(this.document == null){
+            document = new DocumentoModelo(this); 
+        }
         JColorChooser color = new JColorChooser(); 
         int resultado = JOptionPane.showConfirmDialog(null, color, "Selecciona un color", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         
         if(resultado == JOptionPane.OK_OPTION){
             Color c = color.getColor(); 
-            StyleConstants.setFontSize(this.vista.getAttri(), (int) this.document.getDefaultSize()); 
+            StyleConstants.setFontSize(this.vista.getAttri(), (int) this.document.getSize()); 
             StyleConstants.setForeground(this.vista.getAttri(), c);
             this.vista.getTextElement().setCharacterAttributes(this.vista.getAttri(), false);
         }
@@ -113,12 +119,14 @@ public class DocumentoController {
     // Cambiar a negrita
     
     public void pickBold(){
-        document = new DocumentoModelo(this); 
+        if(this.document == null){
+            document = new DocumentoModelo(this); 
+        }
         if(this.document.getNegrita()){
             this.document.setNegrita(false);
         }else if(!this.document.getNegrita()){
             this.document.setNegrita(true);
-            StyleConstants.setFontSize(this.vista.getAttri(), (int) this.document.getDefaultSize()); 
+            StyleConstants.setFontSize(this.vista.getAttri(), (int) this.document.getSize()); 
             StyleConstants.setBold(this.vista.getAttri(), true);
             this.vista.getTextElement().setCharacterAttributes(this.vista.getAttri(), false);
         }
@@ -143,8 +151,11 @@ public class DocumentoController {
     // Size 
     
     public void sizeLetter(){
-        document = new DocumentoModelo(this); 
-        StyleConstants.setFontSize(this.vista.getAttri(), (int) this.document.getDefaultSize()); 
+        if(this.document == null){
+            document = new DocumentoModelo(this); 
+        }
+        this.document.setSize(this.vista.letterSize());
+        StyleConstants.setFontSize(this.vista.getAttri(), (int) this.document.getSize()); 
         this.vista.getTextElement().setCharacterAttributes(this.vista.getAttri(), false);
     }
 }

@@ -26,17 +26,15 @@ public class DocumentoModelo {
     
     public DocumentoModelo(DocumentoController documentController){
         this.documentController = documentController; 
+        this.contenido = ""; 
+        this.negrita = false; 
+        this.size = DEFAULT_SIZE; 
     }
     
     public DocumentoModelo(Font fuente, String tipo_fuente, int tamano_fuente, DocumentoController dc){
         this(dc); 
-        this.negrita = false; 
-        
         this.font = fuente; 
         this.tipo = tipo_fuente; 
-        this.size = tamano_fuente; 
-        
-        this.contenido = ""; 
         
     }
 

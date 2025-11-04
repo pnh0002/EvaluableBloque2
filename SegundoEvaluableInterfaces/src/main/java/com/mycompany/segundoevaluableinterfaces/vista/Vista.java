@@ -11,6 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 
 /**
@@ -45,7 +48,7 @@ public class Vista extends javax.swing.JFrame {
         Size.setValue(12);
         
         font = new Font("Garamond", Font.PLAIN, 12);  
-        
+        attri = new SimpleAttributeSet(); 
         
         
         // Cargar un estilo de pantalla "Moderno" 
@@ -269,13 +272,24 @@ public class Vista extends javax.swing.JFrame {
     // Primer tipo de letra 
     
     private void jMenuItem4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseClicked
-        font = new Font("Times New Roman", Font.PLAIN, 12); 
+        //font = new Font("Ravie", Font.PLAIN, 12); 
+        
+        StyledDocument doc = Text.getStyledDocument();
+        SimpleAttributeSet letra = new SimpleAttributeSet();
+        
+        StyleConstants.setFontFamily(letra, "Ravie");
+        
+        int inicio = Text.getSelectionStart();
+        int fin = Text.getSelectionEnd();
+        
+        doc.setCharacterAttributes(inicio, fin, letra, false);
+        Text.setStyledDocument(doc);
     }//GEN-LAST:event_jMenuItem4MouseClicked
 
     // Segundo tipo de letra 
     
     private void jMenuItem5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem5MouseClicked
-        font = new Font("Times New Roman", Font.PLAIN, 12); 
+        font = new Font("Poppin", Font.PLAIN, 12); 
     }//GEN-LAST:event_jMenuItem5MouseClicked
 
     // Tercer Tipo de letra 
@@ -347,6 +361,10 @@ public class Vista extends javax.swing.JFrame {
         this.Text.setText(m); 
     }
    
+    
+    public int letterSize(){
+        return (int) Size.getValue(); 
+    }
     
     /**
      * @param args the command line arguments
