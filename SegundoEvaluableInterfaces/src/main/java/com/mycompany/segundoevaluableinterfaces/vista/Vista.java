@@ -35,7 +35,7 @@ public class Vista extends javax.swing.JFrame {
     private MutableAttributeSet attri; 
     
     private Font font; 
-    
+    private Sound sonido; 
     
     DocumentoController documentController = new DocumentoController(this); 
     
@@ -46,6 +46,8 @@ public class Vista extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         Size.setValue(12);
+        
+        sonido = new Sound(); 
         
         font = new Font("Garamond", Font.PLAIN, 12);  
         attri = new SimpleAttributeSet(); 
@@ -69,6 +71,7 @@ public class Vista extends javax.swing.JFrame {
         Theme = new javax.swing.JToggleButton();
         Size = new javax.swing.JSpinner();
         jToggleButton1 = new javax.swing.JToggleButton();
+        jToggleButton2 = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu7 = new javax.swing.JMenu();
@@ -102,6 +105,12 @@ public class Vista extends javax.swing.JFrame {
         jToggleButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jToggleButton1MouseClicked(evt);
+            }
+        });
+
+        jToggleButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jToggleButton2MouseClicked(evt);
             }
         });
 
@@ -203,23 +212,27 @@ public class Vista extends javax.swing.JFrame {
                         .addComponent(jToggleButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Size, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
+                        .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(Theme, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(Theme, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Size, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jToggleButton1))
-                        .addGap(16, 16, 16)))
+                        .addGap(16, 16, 16))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Theme, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(jToggleButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -274,16 +287,9 @@ public class Vista extends javax.swing.JFrame {
     private void jMenuItem4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem4MouseClicked
         //font = new Font("Ravie", Font.PLAIN, 12); 
         
-        StyledDocument doc = Text.getStyledDocument();
-        SimpleAttributeSet letra = new SimpleAttributeSet();
-        
-        StyleConstants.setFontFamily(letra, "Ravie");
-        
-        int inicio = Text.getSelectionStart();
-        int fin = Text.getSelectionEnd();
-        
-        doc.setCharacterAttributes(inicio, fin, letra, false);
-        Text.setStyledDocument(doc);
+        StyleConstants.setFontFamily(attri, "Ravie");
+        Text.setCharacterAttributes(attri, false);
+        //Text.setStyledDocument(doc);
     }//GEN-LAST:event_jMenuItem4MouseClicked
 
     // Segundo tipo de letra 
@@ -328,6 +334,10 @@ public class Vista extends javax.swing.JFrame {
         this.documentController.saveDocumment();
         
     }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void jToggleButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton2MouseClicked
+        sonido.play(1, false, "music");
+    }//GEN-LAST:event_jToggleButton2MouseClicked
 
     
     
@@ -419,5 +429,6 @@ public class Vista extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButton2;
     // End of variables declaration//GEN-END:variables
 }
